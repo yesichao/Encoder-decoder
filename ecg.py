@@ -19,6 +19,9 @@ sign_class = ['N', 'S', 'V','F']
 def MaxMinNormalization(x):
     x = (x - np.min(x)) / (np.max(x) - np.min(x))
     return x
+def Z_ScoreNormalization(x):
+    x = (x - np.average(x)) / np.std(x)
+    return x
 def creat_data():
     for i in range(len(target_class)):
         s=data[target_class[i]]
@@ -31,7 +34,7 @@ def creat_data():
             print(data_path + '/' + str(s[k]) + target_class[i])
             record = wfdb.rdrecord(data_path + '/' + str(s[k]), sampfrom=0, channel_names=['MLII'])
             sigal = record.p_signal
-            sigal = MaxMinNormalization(sigal)
+            sigal = Z_ScoreNormalization(sigal)
             annotation = wfdb.rdann(data_path + '/' + str(s[k]), 'atr')
             while end_time <= sigal.shape[0]:
                 sign = sigal[start_time:end_time]
